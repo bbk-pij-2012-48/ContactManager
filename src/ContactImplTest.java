@@ -4,32 +4,34 @@ import org.junit.*;
 
 
 public class ContactImplTest {
+	public ContactImpl demo;
 	
 	@Before
 	public void buildUp() {
-		ContactImpl demo = new ContactImpl(123456789,"Joseph Bloggs");
+		demo = new ContactImpl(123456789,"Joseph Bloggs");
 		demo.addNotes("Meeting 1");
 		demo.addNotes("Meeting 2");
 	}
-
+	
 	@Test
 	public void testGetId() {
-		fail("Not yet implemented");
+		int output = demo.getId();
+		int expected = 123456789;
+		assertEquals(output, expected);
 	}
 
 	@Test
 	public void testGetName() {
-		fail("Not yet implemented");
+		String output = demo.getName();
+		String expected = "Joseph Bloggs";
+		assertEquals(output, expected);
 	}
 
 	@Test
-	public void testGetNotes() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddNotes() {
-		fail("Not yet implemented");
+	public void testNotes() {
+		String output = demo.getNotes();
+		String expected = "Meeting 1\nMeeting 2";
+		assertEquals(output,expected);
 	}
 
 }
