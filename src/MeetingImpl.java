@@ -3,23 +3,30 @@ import java.util.Set;
 
 
 public class MeetingImpl implements Meeting {
+	
+	private int id;
+	private Calendar date;
+	private Set<Contact> contacts;
 
+	public MeetingImpl(int id, Calendar date, Set<Contact> contacts) {
+		this.id = id;
+		this.date = date;
+		this.contacts = contacts;
+	}
+	
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return id;
 	}
 
 	@Override
 	public Calendar getDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return date;
 	}
 
 	@Override
 	public Set<Contact> getContacts() {
-		// TODO Auto-generated method stub
-		return null;
+		return contacts;
 	}
 
 }

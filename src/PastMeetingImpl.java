@@ -3,29 +3,30 @@ import java.util.Set;
 
 
 public class PastMeetingImpl implements PastMeeting {
+	
+	private int id;
+	private Calendar date;
+	private Set<Contact> contacts;
+	private String notes;
 
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return id;
 	}
 
 	@Override
 	public Calendar getDate() {
-		// TODO Auto-generated method stub
-		return null;
+		return date;
 	}
 
 	@Override
 	public Set<Contact> getContacts() {
-		// TODO Auto-generated method stub
-		return null;
+		return contacts;
 	}
 
 	@Override
 	public String getNotes() {
-		// TODO Auto-generated method stub
-		return null;
+		return notes;
 	}
 
 }
