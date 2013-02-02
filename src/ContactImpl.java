@@ -1,27 +1,38 @@
 
 public class ContactImpl implements Contact {
+	
+	private int id;
+	private String name;
+	private String notes;
+	
+	public ContactImpl(int id, String name) {
+		this.id = id;
+		this.name = new String(name);
+		this.notes = "";		
+	}
 
 	@Override
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return id;
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	@Override
 	public String getNotes() {
-		// TODO Auto-generated method stub
-		return null;
+		return notes;
 	}
 
 	@Override
 	public void addNotes(String note) {
-		// TODO Auto-generated method stub
+		if(notes.length() == 0){
+			notes += note;
+		} else {
+			notes += "\n" + note;
+		}
 
 	}
 
