@@ -27,17 +27,27 @@ public class MeetingImplTest {
 	
 	@Test
 	public void testGetId() {
-		fail("Not yet implemented");
+		int output = demo.getId();
+		int expected = 123456789;
+		assertEquals(output, expected);
 	}
 
 	@Test
 	public void testGetDate() {
-		fail("Not yet implemented");
+		Calendar output = demo.getDate();
+		Calendar expected = Calendar.getInstance();
+		assertEquals(output, expected);
 	}
 
 	@Test
 	public void testGetContacts() {
-		fail("Not yet implemented");
+		Set<Contact> output = demo.getContacts();
+		Set<Contact> expected = new TreeSet<Contact>();
+		Contact contact1 = new ContactImpl(1,"Dave");
+		Contact contact2 = new ContactImpl(2,"Murray");
+		expected.add(contact1);
+		expected.add(contact2);	
+		assertEquals(output, expected);
 	}
 
 }
