@@ -33,17 +33,17 @@ public class ContactImpl implements Contact, Comparable<ContactImpl>{
 		} else {
 			notes += "\n" + note;
 		}
-		
-
 	}
 
 	@Override
 	public int compareTo(ContactImpl contact2) {
 		if(this.getId() == contact2.getId()) {
-			return 1;  								// Check that this is right - i.e. that contacts are uniquely 
+			return 0;  								// Check that this is right - i.e. that contacts are uniquely 
 		}											// defined by Id, and that 1 means equal, 0 not
-		return 0;
+		if(this.getId() < contact2.getId()) {
+			return -1;
 		}
+		return 1;
 	}
-
 }
+
