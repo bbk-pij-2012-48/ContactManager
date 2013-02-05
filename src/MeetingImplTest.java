@@ -18,13 +18,10 @@ public class MeetingImplTest {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2013, 2, 3);
 		Set<Contact> contacts = new TreeSet<Contact>();
-		Set<Contact> test = new TreeSet<Contact>();
 		Contact contact1 = new ContactImpl(1,"Dave");
 		Contact contact2 = new ContactImpl(2,"Murray");
 		contacts.add(contact1);
 		contacts.add(contact2);
-		test.add(contact1);
-		test.add(contact2);		
 		demo = new MeetingImpl(123456789, cal, contacts);
 	}
 	
@@ -39,7 +36,8 @@ public class MeetingImplTest {
 	public void testGetDate() {
 		Calendar output = demo.getDate();
 		Calendar expected = Calendar.getInstance();
-		assertEquals(output, expected);
+		expected.set(2013, 2, 3);
+		assertEquals(output.compareTo(expected),0); 
 	}
 
 	@Test
