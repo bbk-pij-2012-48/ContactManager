@@ -18,11 +18,14 @@ public class MeetingImplTest {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2013, 2, 3);
 		Set<Contact> contacts = new TreeSet<Contact>();
+		Set<Contact> test = new TreeSet<Contact>();
 		Contact contact1 = new ContactImpl(1,"Dave");
 		Contact contact2 = new ContactImpl(2,"Murray");
 		contacts.add(contact1);
 		contacts.add(contact2);
-		demo = new MeetingImpl(123456789, cal, null);
+		test.add(contact1);
+		test.add(contact2);		
+		demo = new MeetingImpl(123456789, cal, contacts);
 	}
 	
 	@Test

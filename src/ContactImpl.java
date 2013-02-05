@@ -1,5 +1,5 @@
 
-public class ContactImpl implements Contact {
+public class ContactImpl implements Contact, Comparable<ContactImpl>{
 	
 	private int id;
 	private String name;
@@ -33,7 +33,17 @@ public class ContactImpl implements Contact {
 		} else {
 			notes += "\n" + note;
 		}
+		
 
+	}
+
+	@Override
+	public int compareTo(ContactImpl contact2) {
+		if(this.getId() == contact2.getId()) {
+			return 1;  								// Check that this is right - i.e. that contacts are uniquely 
+		}											// defined by Id, and that 1 means equal, 0 not
+		return 0;
+		}
 	}
 
 }
