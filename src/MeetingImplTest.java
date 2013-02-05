@@ -22,7 +22,7 @@ public class MeetingImplTest {
 		Contact contact2 = new ContactImpl(2,"Murray");
 		contacts.add(contact1);
 		contacts.add(contact2);
-		demo = new MeetingImpl(123456789, cal, contacts);
+		demo = new MeetingImpl(123456789, cal, null);
 	}
 	
 	@Test
