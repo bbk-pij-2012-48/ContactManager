@@ -17,7 +17,7 @@ public class MeetingImplTest {
 	public void buildUp() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2013, 2, 3);
-		Set<Contact> contacts = new TreeSet<Contact>();
+		Set<Contact> contacts = new TreeSet<Contact>();		
 		Contact contact1 = new ContactImpl(1,"Dave");
 		Contact contact2 = new ContactImpl(2,"Murray");
 		contacts.add(contact1);
