@@ -55,8 +55,8 @@ public class PastMeetingImplTest {
 		demo.addNotes("Note 1");
 		demo.addNotes("Note 2");
 		String output = demo.getNotes();
-		String expected = "Note 1\nNote2";
-		assertEquals(output, expected);
+		String expected = "Note 1\nNote 2";
+		assertTrue(output.equals(expected));
 	}
 
 }
