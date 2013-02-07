@@ -1,13 +1,49 @@
 import static org.junit.Assert.*;
 
-import org.junit.Test;
+import java.util.Calendar;
+import java.util.TreeSet;
+import java.util.Set;
 
+import org.junit.Test;
+import org.junit.Before;
 
 public class ContactManagerImplTest {
+	private ContactManager demo;
+	
+	@Before
+	public void buildUp() {
+		demo = new ContactManagerImpl();
+		demo.addNewContact("Joe Bloggs", "Joe Blogg's notes");
+		demo.addNewContact("John Smith", "John Smith's notes");
+	}
 
 	@Test
 	public void testAddFutureMeeting() {
-		fail("Not yet implemented");
+		Calendar testDate = Calendar.getInstance();
+		testDate.set(1,2,2014);
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		contacts.add(new ContactImpl(2, "John Smith"));
+		assertEquals(2,demo.addFutureMeeting(contacts, testDate));
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void AddFutureMeetingIllegalContact() {
+		Calendar testDate = Calendar.getInstance();
+		testDate.set(1,2,2014);
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		contacts.add(new ContactImpl(2, "Dave Jones"));
+		demo.addFutureMeeting(contacts, testDate);		
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void AddFutureMeetingIllegalDate() {
+		Calendar testDate = Calendar.getInstance();
+		testDate.set(1,2,2012);
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		demo.addFutureMeeting(contacts, testDate);
 	}
 
 	@Test
