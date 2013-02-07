@@ -16,6 +16,7 @@ public class ContactManagerImpl implements ContactManager {
 		contacts = new TreeSet<Contact>();
 		futureMeetings = new TreeSet<FutureMeeting>();
 		pastMeetings = new TreeSet<PastMeeting>();
+		nextMeetingId = 1;
 	}
 	
 	public static void incrementId() {
@@ -50,20 +51,18 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
-		int meetingId;
-		boolean inPast = timeInPast(date); // boolean flags for exception
-		boolean contactErr = unknownContact(contacts);
-
-		if(inPast) {
+		int meetingId = nextMeetingId; // not using nextMeetingId directly as this will increment during the method
+		
+		// Test for any illegal arguments
+		if(timeInPast(date)) {
 			throw new IllegalArgumentException("Error - Future Meeting cannot be in the past");
 		}
-		if(contactErr) {
+		if(unknownContact(contacts)) {
 			throw new IllegalArgumentException("Error - One or more of the specified contacts is not recognised");
 		}
 		
-		FutureMeeting newMeeting = new FutureMeetingImpl(nextMeetingId, date, contacts);
-	
-
+		FutureMeeting newMeeting = new FutureMeetingImpl(meetingId, date, contacts);
+		futureMeetings.add(newMeeting);
 		return meetingId;
 	}
 
