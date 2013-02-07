@@ -71,6 +71,11 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public PastMeeting getPastMeeting(int id) {
+		// Check that there is no such meeting happening in the future
+		if(getFutureMeeting(id) != null) {
+			throw new IllegalArgumentException("Error - A meeting with this ID is scheduled in the future");
+		}
+		
 		Iterator<PastMeeting> itr = pastMeetings.iterator();
 		while(itr.hasNext()) {
 			PastMeeting tmp = itr.next();
@@ -84,6 +89,11 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
+		// Check that there is no such meeting happening in the past
+		if(getPastMeeting(id) != null) {
+			throw new IllegalArgumentException("Error - A meeting with this ID has happened in the past");
+		}
+		
 		Iterator<FutureMeeting> itr = futureMeetings.iterator();
 		while(itr.hasNext()) {
 			FutureMeeting tmp = itr.next();
