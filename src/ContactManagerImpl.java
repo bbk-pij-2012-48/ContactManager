@@ -28,6 +28,7 @@ public class ContactManagerImpl implements ContactManager {
 		if(date.before(current)) {
 			return true;
 		}
+		
 		return false;
 	}
 
@@ -46,6 +47,7 @@ public class ContactManagerImpl implements ContactManager {
 				}
 			}
 		}
+		
 		return false;
 	}
 
@@ -76,6 +78,7 @@ public class ContactManagerImpl implements ContactManager {
 				return tmp;
 			}
 		}
+		
 		return null;
 	}
 
@@ -88,12 +91,24 @@ public class ContactManagerImpl implements ContactManager {
 				return tmp;
 			}
 		}
+		
 		return null;
 	}
 
 	@Override
 	public Meeting getMeeting(int id) {
-		// TODO Auto-generated method stub
+		// Search past meetings
+		PastMeeting tmp = getPastMeeting(id);
+		if(tmp != null) {
+			return tmp;
+		}
+		
+		// Search future meetings
+		FutureMeeting tmp2 = getFutureMeeting(id);
+		if(tmp2 != null) {
+			return tmp2;
+		}
+		
 		return null;
 	}
 
