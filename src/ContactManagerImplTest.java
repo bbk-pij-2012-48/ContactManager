@@ -15,16 +15,23 @@ public class ContactManagerImplTest {
 		demo = new ContactManagerImpl();
 		demo.addNewContact("Joe Bloggs", "Joe Blogg's notes");
 		demo.addNewContact("John Smith", "John Smith's notes");
+		Calendar testDate = Calendar.getInstance();
+		testDate.set(1,2,2014);
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		demo.addFutureMeeting(contacts, testDate);
+		testDate.set(1,2,2010);
+		demo.addPastMeeting(contacts, testDate);
 	}
 
 	@Test
 	public void testAddFutureMeeting() {
 		Calendar testDate = Calendar.getInstance();
-		testDate.set(1,2,2014);
+		testDate.set(1,3,2014);
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
 		contacts.add(new ContactImpl(2, "John Smith"));
-		assertEquals(2,demo.addFutureMeeting(contacts, testDate));
+		assertEquals(3,demo.addFutureMeeting(contacts, testDate));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -34,7 +41,7 @@ public class ContactManagerImplTest {
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
 		contacts.add(new ContactImpl(2, "Dave Jones"));
-		demo.addFutureMeeting(contacts, testDate);		
+		demo.addFutureMeeting(contacts, testDate);	
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -49,6 +56,12 @@ public class ContactManagerImplTest {
 	@Test
 	public void testGetPastMeeting() {
 		fail("Not yet implemented");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void GetPastMeetingIllegalMeeting() {
+		
+		demo.getMeeting(2);
 	}
 
 	@Test

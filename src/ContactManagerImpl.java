@@ -11,12 +11,14 @@ public class ContactManagerImpl implements ContactManager {
 	private Set<FutureMeeting> futureMeetings;
 	private Set<PastMeeting> pastMeetings;
 	private static int nextMeetingId;
+	private static int nextContactId;
 
 	public ContactManagerImpl() {
 		contacts = new TreeSet<Contact>();
 		futureMeetings = new TreeSet<FutureMeeting>();
 		pastMeetings = new TreeSet<PastMeeting>();
 		nextMeetingId = 1;
+		nextContactId = 1;
 	}
 	
 	public static void incrementId() {
