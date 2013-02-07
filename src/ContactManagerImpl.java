@@ -81,7 +81,13 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
-		// TODO Auto-generated method stub
+		Iterator<FutureMeeting> itr = futureMeetings.iterator();
+		while(itr.hasNext()) {
+			FutureMeeting tmp = itr.next();
+			if(tmp.getId() == id) {
+				return tmp;
+			}
+		}
 		return null;
 	}
 
