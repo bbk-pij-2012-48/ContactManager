@@ -63,12 +63,19 @@ public class ContactManagerImpl implements ContactManager {
 		
 		FutureMeeting newMeeting = new FutureMeetingImpl(meetingId, date, contacts);
 		futureMeetings.add(newMeeting);
+		
 		return meetingId;
 	}
 
 	@Override
 	public PastMeeting getPastMeeting(int id) {
-		// TODO Auto-generated method stub
+		Iterator<PastMeeting> itr = pastMeetings.iterator();
+		while(itr.hasNext()) {
+			PastMeeting tmp = itr.next();
+			if(tmp.getId() == id) {
+				return tmp;
+			}
+		}
 		return null;
 	}
 
