@@ -6,17 +6,22 @@ import java.util.TreeSet;
 
 
 public class ContactManagerImpl implements ContactManager {
-	
+
 	private Set<Contact> contacts;
 	private Set<FutureMeeting> futureMeetings;
 	private Set<PastMeeting> pastMeetings;
-	
+	private static int nextMeetingId;
+
 	public ContactManagerImpl() {
 		contacts = new TreeSet<Contact>();
 		futureMeetings = new TreeSet<FutureMeeting>();
 		pastMeetings = new TreeSet<PastMeeting>();
 	}
 	
+	public static void incrementId() {
+		nextMeetingId++;
+	}
+
 	private boolean timeInPast(Calendar date) {
 		Calendar current = Calendar.getInstance();
 		if(date.before(current)) {
@@ -24,7 +29,7 @@ public class ContactManagerImpl implements ContactManager {
 		}
 		return false;
 	}
-	
+
 	private boolean unknownContact(Set<Contact> testContacts) {
 		Iterator<Contact> itr = testContacts.iterator();
 		while(itr.hasNext()) {
@@ -48,23 +53,17 @@ public class ContactManagerImpl implements ContactManager {
 		int meetingId;
 		boolean inPast = timeInPast(date); // boolean flags for exception
 		boolean contactErr = unknownContact(contacts);
-		// test here if meeting is in past and set inPast
-		// test here if contact unknown, and set contactErr
 
-		try {
-			if(inPast || contactErr) {
-				throw IllegalArgumentException;
-			}
-			
+		if(inPast) {
+			throw new IllegalArgumentException("Error - Future Meeting cannot be in the past");
 		}
-		catch(IllegalArgumentException ex) {
-			if(inPast){
-				System.out.println("Error - Future Meeting cannot be in the past");
-			}
-			if(contactErr){
-				System.out.println("Error - One or more contacts is unknown");
-			}
+		if(contactErr) {
+			throw new IllegalArgumentException("Error - One or more of the specified contacts is not recognised");
 		}
+		
+		FutureMeeting newMeeting = new FutureMeetingImpl(nextMeetingId, date, contacts);
+	
+
 		return meetingId;
 	}
 
