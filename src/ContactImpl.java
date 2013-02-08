@@ -8,7 +8,8 @@ public class ContactImpl implements Contact, Comparable<ContactImpl>{
 	public ContactImpl(int id, String name) {
 		this.id = id;
 		this.name = new String(name);
-		this.notes = "";		
+		this.notes = "";
+		ContactManagerImpl.incrementContactId();
 	}
 
 	@Override

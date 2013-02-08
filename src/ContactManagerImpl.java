@@ -21,8 +21,12 @@ public class ContactManagerImpl implements ContactManager {
 		nextContactId = 1;
 	}
 	
-	public static void incrementId() {
+	public static void incrementMeetingId() {
 		nextMeetingId++;
+	}
+	
+	public static void incrementContactId() {
+		
 	}
 
 	private boolean timeInPast(Calendar date) {

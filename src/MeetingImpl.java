@@ -12,7 +12,7 @@ public class MeetingImpl implements Meeting {
 		this.id = id;
 		this.date = date;
 		this.contacts = contacts;
-		ContactManagerImpl.incrementId();
+		ContactManagerImpl.incrementMeetingId();
 	}
 	
 	@Override
