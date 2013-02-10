@@ -1,6 +1,8 @@
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.Set;
 
@@ -109,14 +111,43 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetMeeting() {
-		fail("Not yet implemented");
+		Calendar testDate = Calendar.getInstance();
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		testDate.set(1,2,2014);
+		Meeting expected = new FutureMeetingImpl(1, testDate, contacts);
+		Meeting output = demo.getMeeting(1);
+		assertEquals(expected, output);
+		
+		testDate.set(1,2,2010);
+		expected = new PastMeetingImpl(2, testDate, contacts);
+		output = demo.getMeeting(2);
+		assertEquals(expected, output);
+		
+		output = demo.getMeeting(20);
+		assertNull(output);
 	}
 
 	@Test
 	public void testGetFutureMeetingListContact() {
-		fail("Not yet implemented");
+		List<Meeting> expected = new ArrayList<Meeting>();
+		List<Meeting> output = demo.getFutureMeetingList(new ContactImpl(2, "John Smith"));
+		assertTrue(expected.equals(output));
+		
+		Calendar testDate = Calendar.getInstance();
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		testDate.set(1,2,2014);
+		expected.add(new FutureMeetingImpl(1, testDate, contacts));
+		output = demo.getFutureMeetingList(new ContactImpl(1, "Joe Bloggs"));
+		assertTrue(expected.equals(output));
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetFutureMeetingListIllegalContact() {
+		demo.getFutureMeetingList(new ContactImpl(20, "Steve Jobs"));
+	}
+	
 	@Test
 	public void testGetFutureMeetingListCalendar() {
 		fail("Not yet implemented");
