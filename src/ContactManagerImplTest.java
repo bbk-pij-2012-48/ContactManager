@@ -157,7 +157,26 @@ public class ContactManagerImplTest {
 	
 	@Test
 	public void testGetFutureMeetingListCalendar() {
-		fail("Not yet implemented");
+		// test empty list
+		Calendar testDate = Calendar.getInstance();
+		testDate.set(2030,1,2);
+		List<Meeting> expected = new ArrayList<Meeting>();
+		List<Meeting> output = demo.getFutureMeetingList(testDate);
+		assertTrue(expected.equals(output));
+		
+		// test 2 meetings return, noting chronological order
+		
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		testDate.set(1,2,2014);
+		expected.add(new FutureMeetingImpl(1, testDate, contacts));
+		
+		testDate.set(1,2,2014,23,59);
+		demo.addFutureMeeting(contacts, testDate);
+		expected.add(new FutureMeetingImpl(3, testDate, contacts));
+		
+		output = demo.getFutureMeetingList(testDate);
+		assertTrue(output.equals(expected));			
 	}
 
 	@Test
