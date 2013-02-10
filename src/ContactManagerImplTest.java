@@ -64,7 +64,6 @@ public class ContactManagerImplTest {
 		Meeting expected = new MeetingImpl(2, testDate, contacts);
 		
 		assertEquals(output, expected);
-		
 	}
 
 	@Test
