@@ -181,7 +181,30 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetPastMeetingList() {
-		fail("Not yet implemented");
+		// test empty list
+		List<PastMeeting> expected = new ArrayList<PastMeeting>();
+		List<PastMeeting> output = demo.getPastMeetingList(new ContactImpl(2, "John Smith"));
+		assertTrue(output.equals(expected));
+		
+		// test 2 meetings return, noting chronological order
+		Set<Contact> contacts = new TreeSet<Contact>();
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		Calendar testDate = Calendar.getInstance();
+		testDate.set(1,2,2009);
+		demo.addNewPastMeeting(contacts, testDate, "Notes");
+		
+		expected.add(new PastMeetingImpl(3, testDate, contacts));
+		testDate.set(1,2,2010);
+		expected.add(new PastMeetingImpl(2, testDate, contacts));		
+		output = demo.getPastMeetingList(new ContactImpl(1, "Joe Bloggs"));
+		
+		assertTrue(output.equals(expected));
+		
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetPastMeetingListIllegalContact() {
+		demo.getPastMeetingList(new ContactImpl(20, "Steve Jobs"));
 	}
 
 	@Test
@@ -195,7 +218,6 @@ public class ContactManagerImplTest {
 		Meeting expected = new PastMeetingImpl(3, testDate, contacts);
 		Meeting output = demo.getMeeting(3);
 		assertEquals(expected, output);
-		
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
