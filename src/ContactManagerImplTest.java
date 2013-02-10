@@ -141,7 +141,7 @@ public class ContactManagerImplTest {
 		expected.add(new FutureMeetingImpl(1, testDate, contacts));
 		output = demo.getFutureMeetingList(new ContactImpl(1, "Joe Bloggs"));
 		assertTrue(expected.equals(output));
-	}
+	}// Need to test chronological sorting.**********************************************************************************
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetFutureMeetingListIllegalContact() {
@@ -170,7 +170,21 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testAddNewContact() {
-		fail("Not yet implemented");
+		demo.addNewContact("Dave Murray", "");
+		Set<Contact> expected = new TreeSet<Contact>();
+		expected.add(new ContactImpl(3, "Dave Murray"));
+		Set<Contact> output = demo.getContacts("Dave Murray");
+		assertTrue(output.equals(expected));
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testAddNewContactNullName() {
+		demo.addNewContact(null, "notes");
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testAddNewContactNullNotes() {
+		demo.addNewContact("Dave Murray", null);
 	}
 
 	@Test
@@ -180,7 +194,19 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetContactsString() {
-		fail("Not yet implemented");
+		Set<Contact> output = demo.getContacts("ZZZZ");
+		Set<Contact> expected = new TreeSet<Contact>();
+		assertTrue(output.equals(expected));
+		
+		expected.add(new ContactImpl(2, "John Smith"));
+		output = demo.getContacts("John");
+		assertTrue(output.equals(expected));
+	}
+	
+	@Test(expected = NullPointerException.class)
+	public void testGetContactsNullString() {
+		String input = null;
+		demo.getContacts(input);
 	}
 
 	@Test
