@@ -130,18 +130,25 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetFutureMeetingListContact() {
+		// test empty list
 		List<Meeting> expected = new ArrayList<Meeting>();
 		List<Meeting> output = demo.getFutureMeetingList(new ContactImpl(2, "John Smith"));
 		assertTrue(expected.equals(output));
 		
+		// test 2 meetings return, noting chronological order
 		Calendar testDate = Calendar.getInstance();
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
 		testDate.set(1,2,2014);
 		expected.add(new FutureMeetingImpl(1, testDate, contacts));
+		
+		testDate.set(1,2,2014,23,59);
+		demo.addFutureMeeting(contacts, testDate);
+		expected.add(new FutureMeetingImpl(3, testDate, contacts));
+		
 		output = demo.getFutureMeetingList(new ContactImpl(1, "Joe Bloggs"));
-		assertTrue(expected.equals(output));
-	}// Need to test chronological sorting.**********************************************************************************
+		assertTrue(output.equals(expected));		
+	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testGetFutureMeetingListIllegalContact() {
