@@ -228,8 +228,18 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public void addMeetingNotes(int id, String text) {
-		// TODO Auto-generated method stub
-
+		// Test for any illegal arguments
+		if(text == null) {
+			throw new NullPointerException("Error - Must add notes");
+		}
+		Meeting tmp = getMeeting(id);
+		if(tmp == null) {
+			throw new IllegalArgumentException("Error - Meeting does not exist");
+		}
+		if(tmp instanceof FutureMeetingImpl) {
+			throw new IllegalStateException("Error - Meeting cannot be in the future");
+		}
+		((PastMeetingImpl)tmp).addNotes(text);
 	}
 
 	@Override
