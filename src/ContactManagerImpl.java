@@ -244,8 +244,12 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public void addNewContact(String name, String notes) {
-		// TODO Auto-generated method stub
-
+		if(name == null || notes == null) {
+			throw new NullPointerException("Must specify both name and notes");
+		}
+		Contact tmp = new ContactImpl(nextContactId, name);
+		tmp.addNotes(notes);
+		contacts.add(tmp);
 	}
 
 	@Override
