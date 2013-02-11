@@ -210,7 +210,7 @@ public class ContactManagerImpl implements ContactManager {
 		int meetingId = nextMeetingId; // not using nextMeetingId directly as this will increment during the method
 		
 		// Test for any illegal arguments
-		if(contacts == null || date == null || test == null) {
+		if(contacts == null || date == null || text == null) {
 			throw new NullPointerException("Error - Must specify contacts, date and notes for meeting");
 		}
 		if(unknownContact(contacts)) {
@@ -220,7 +220,7 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException("Error - Must specify at least one contact");
 		}
 		
-		PastMeetingImpl tmp = new PastMeetingImpl(nextMeetingId, date, contacts);
+		PastMeetingImpl tmp = new PastMeetingImpl(meetingId, date, contacts);
 		tmp.addNotes(text);
 		pastMeetings.add(tmp);
 		
