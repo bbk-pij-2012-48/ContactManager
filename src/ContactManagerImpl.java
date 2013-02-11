@@ -1,6 +1,8 @@
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -137,8 +139,25 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact) {
-		// TODO Auto-generated method stub
-		return null;
+		// Check contact is known
+		Set<Contact> test = new TreeSet<Contact>();
+		test.add(contact);
+		if(unknownContact(test)) {
+			throw new IllegalArgumentException("Error - Contact unknown");
+		}
+		
+		List<Meeting> output = new ArrayList<Meeting>();
+		Iterator<PastMeeting> itr = pastMeetings.iterator();
+		while(itr.hasNext()) {
+			PastMeeting tmp = itr.next();
+			if(((PastMeetingImpl)tmp).attendedBy(contact)) {
+				output.add(tmp);
+			}
+		}
+		
+		DateComparator comparator = new DateComparator();
+		Collections.sort(output, comparator);
+		return output;
 	}
 
 	@Override
