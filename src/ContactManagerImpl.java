@@ -121,13 +121,13 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public Meeting getMeeting(int id) {
 		// Search past meetings
-		PastMeeting tmp = getPastMeeting(id);
+		PastMeeting tmp = getPastMeetingNoException(id);
 		if(tmp != null) {
 			return tmp;
 		}
 		
 		// Search future meetings
-		FutureMeeting tmp2 = getFutureMeeting(id);
+		FutureMeeting tmp2 = getFutureMeetingNoException(id);
 		if(tmp2 != null) {
 			return tmp2;
 		}
