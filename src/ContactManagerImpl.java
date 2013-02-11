@@ -182,8 +182,26 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public List<PastMeeting> getPastMeetingList(Contact contact) {
-		// TODO Auto-generated method stub
-		return null;
+		// Check contact is known
+		Set<Contact> test = new TreeSet<Contact>();
+		test.add(contact);
+		if(unknownContact(test)) {
+			throw new IllegalArgumentException("Error - Contact unknown");
+		}
+		
+		// Add all past meetings with contact
+		List<PastMeeting> output = new ArrayList<PastMeeting>();
+		Iterator<PastMeeting> itr = pastMeetings.iterator();
+		while(itr.hasNext()) {
+			PastMeeting tmp = itr.next();
+			if(((PastMeetingImpl)tmp).attendedBy(contact)) {
+				output.add(tmp);
+			}
+		}
+		
+		DateComparator comparator = new DateComparator();
+		Collections.sort(output, comparator);
+		return output;
 	}
 
 	@Override
