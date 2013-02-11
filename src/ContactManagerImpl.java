@@ -26,7 +26,7 @@ public class ContactManagerImpl implements ContactManager {
 	}
 	
 	public static void incrementContactId() {
-		
+		nextContactId++;
 	}
 
 	private boolean timeInPast(Calendar date) {
@@ -78,10 +78,13 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public PastMeeting getPastMeeting(int id) {
 		// Check that there is no such meeting happening in the future
-		if(getFutureMeeting(id) != null) {
+		if(getFutureMeetingNoException(id) != null) {
 			throw new IllegalArgumentException("Error - A meeting with this ID is scheduled in the future");
 		}
-		
+		return getPastMeetingNoException(id);
+	}
+	
+	private PastMeeting getPastMeetingNoException(int id) {
 		Iterator<PastMeeting> itr = pastMeetings.iterator();
 		while(itr.hasNext()) {
 			PastMeeting tmp = itr.next();
@@ -96,10 +99,14 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
 		// Check that there is no such meeting happening in the past
-		if(getPastMeeting(id) != null) {
+		if(getPastMeetingNoException(id) != null) {
 			throw new IllegalArgumentException("Error - A meeting with this ID has happened in the past");
 		}
 		
+		return getFutureMeetingNoException(id);
+	}
+	
+	private FutureMeeting getFutureMeetingNoException(int id) {
 		Iterator<FutureMeeting> itr = futureMeetings.iterator();
 		while(itr.hasNext()) {
 			FutureMeeting tmp = itr.next();
