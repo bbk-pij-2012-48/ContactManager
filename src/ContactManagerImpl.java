@@ -146,12 +146,22 @@ public class ContactManagerImpl implements ContactManager {
 			throw new IllegalArgumentException("Error - Contact unknown");
 		}
 		
+		// Add all past meetings with contact to output
 		List<Meeting> output = new ArrayList<Meeting>();
 		Iterator<PastMeeting> itr = pastMeetings.iterator();
 		while(itr.hasNext()) {
 			PastMeeting tmp = itr.next();
 			if(((PastMeetingImpl)tmp).attendedBy(contact)) {
 				output.add(tmp);
+			}
+		}
+		
+		// Add all future meetings
+		Iterator<FutureMeeting> itr2 = futureMeetings.iterator();
+		while(itr2.hasNext()) {
+			FutureMeeting tmp2 = itr2.next();
+			if(((PastMeetingImpl)tmp2).attendedBy(contact)) {
+				output.add(tmp2);
 			}
 		}
 		
@@ -162,6 +172,8 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date) {
+		List<Meeting> output = new ArrayList<Meeting>();
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
