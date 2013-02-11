@@ -207,8 +207,23 @@ public class ContactManagerImpl implements ContactManager {
 	@Override
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date,
 			String text) {
-		// TODO Auto-generated method stub
-
+		int meetingId = nextMeetingId; // not using nextMeetingId directly as this will increment during the method
+		
+		// Test for any illegal arguments
+		if(contacts == null || date == null || test == null) {
+			throw new NullPointerException("Error - Must specify contacts, date and notes for meeting");
+		}
+		if(unknownContact(contacts)) {
+			throw new IllegalArgumentException("Error - One or more of the specified contacts is not recognised");
+		}
+		if(contacts.isEmpty()) {
+			throw new IllegalArgumentException("Error - Must specify at least one contact");
+		}
+		
+		PastMeetingImpl tmp = new PastMeetingImpl(nextMeetingId, date, contacts);
+		tmp.addNotes(text);
+		pastMeetings.add(tmp);
+		
 	}
 
 	@Override
