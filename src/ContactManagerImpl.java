@@ -251,11 +251,25 @@ public class ContactManagerImpl implements ContactManager {
 		tmp.addNotes(notes);
 		contacts.add(tmp);
 	}
+	
+	private Contact getContact(int id) {
+		Iterator<Contact> itr = contacts.iterator();
+		while(itr.hasNext()) {
+			Contact tmp = itr.next();
+			if(tmp.getId() == id) {
+				return tmp;
+			}
+		}
+		throw new IllegalArgumentException("Error - Contact is unknown");
+	}
 
 	@Override
 	public Set<Contact> getContacts(int... ids) {
-		// TODO Auto-generated method stub
-		return null;
+		Set<Contact> output = new TreeSet<Contact>();
+		for(int id : ids) {
+			output.add(getContact(id));
+		}
+		return output;
 	}
 
 	@Override
