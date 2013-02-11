@@ -1,4 +1,5 @@
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Set;
 
 
@@ -39,6 +40,17 @@ public class MeetingImpl implements Meeting, Comparable<MeetingImpl> {
 			return -1;
 		}
 		return 1;
+	}
+	
+	public boolean attendedBy(Contact contact) {
+		Iterator<Contact> itr = contacts.iterator();
+		while(itr.hasNext()) {
+			if(itr.next().equals(contact)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }
