@@ -267,15 +267,25 @@ public class ContactManagerImpl implements ContactManager {
 	public Set<Contact> getContacts(int... ids) {
 		Set<Contact> output = new TreeSet<Contact>();
 		for(int id : ids) {
-			output.add(getContact(id));
+			output.add(getContact(id)); // IllegalArgumentException thrown if no such contact exists
 		}
 		return output;
 	}
 
 	@Override
 	public Set<Contact> getContacts(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		if(name == null) {
+			throw new NullPointerException("Error - Must enter a name");
+		}
+		Set<Contact> output = new TreeSet<Contact>();
+		Iterator<Contact> itr = contacts.iterator();
+		while(itr.hasNext()) {
+			Contact tmp = itr.next();
+			if(tmp.getName().contains(name)) {
+			output.add(tmp);
+			}
+		}
+		return output;
 	}
 
 	@Override
