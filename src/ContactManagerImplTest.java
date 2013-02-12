@@ -65,7 +65,7 @@ public class ContactManagerImplTest {
 		testDate.set(2010,2,1);
 		Meeting expected = new PastMeetingImpl(2, testDate, contacts);
 		
-		assertEquals(output, expected);
+		assertEquals(((PastMeetingImpl)output).compareTo((PastMeetingImpl)expected), 0);
 	}
 
 	@Test
