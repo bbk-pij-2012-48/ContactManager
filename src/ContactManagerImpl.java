@@ -46,7 +46,7 @@ public class ContactManagerImpl implements ContactManager {
 			Contact tmp = itr.next();
 			Iterator<Contact> itr2 = contacts.iterator();
 			while(itr2.hasNext()) {
-				if(itr2.next().equals(tmp)) {
+				if(((ContactImpl)(itr2.next())).compareTo((ContactImpl)tmp) != 0) {
 					break;
 				}else {
 					if(!itr2.hasNext()) {
