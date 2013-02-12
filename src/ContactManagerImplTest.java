@@ -65,7 +65,7 @@ public class ContactManagerImplTest {
 		testDate.set(2010,2,1);
 		Meeting expected = new PastMeetingImpl(2, testDate, contacts);
 		
-		assertEquals(((PastMeetingImpl)output).compareTo((PastMeetingImpl)expected), 0);
+		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected), 0);
 	}
 
 	@Test
@@ -94,7 +94,7 @@ public class ContactManagerImplTest {
 		testDate.set(2014,2,1);
 		Meeting expected = new FutureMeetingImpl(1, testDate, contacts);
 		
-		assertEquals(output, expected);
+		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
 	}
 	
 	@Test
@@ -117,12 +117,12 @@ public class ContactManagerImplTest {
 		testDate.set(2014,2,1);
 		Meeting expected = new FutureMeetingImpl(1, testDate, contacts);
 		Meeting output = demo.getMeeting(1);
-		assertEquals(expected, output);
+		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
 		
 		testDate.set(2010,2,1);
 		expected = new PastMeetingImpl(2, testDate, contacts);
 		output = demo.getMeeting(2);
-		assertEquals(expected, output);
+		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
 		
 		output = demo.getMeeting(20);
 		assertNull(output);
@@ -217,7 +217,7 @@ public class ContactManagerImplTest {
 		demo.addNewPastMeeting(contacts, testDate, notes);	
 		Meeting expected = new PastMeetingImpl(3, testDate, contacts);
 		Meeting output = demo.getMeeting(3);
-		assertEquals(expected, output);
+		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
