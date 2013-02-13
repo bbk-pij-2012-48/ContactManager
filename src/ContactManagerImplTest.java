@@ -79,11 +79,6 @@ public class ContactManagerImplTest {
 		demo.getPastMeeting(1);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void GetPastMeetingIllegalMeeting() {
-		demo.getMeeting(2);
-	}
-
 	@Test
 	public void testGetFutureMeeting() {
 		Meeting output = demo.getFutureMeeting(1);
