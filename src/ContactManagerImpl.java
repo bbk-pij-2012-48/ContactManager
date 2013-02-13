@@ -47,16 +47,15 @@ public class ContactManagerImpl implements ContactManager {
 			Iterator<Contact> itr2 = contacts.iterator();
 			while(itr2.hasNext()) {
 				if(((ContactImpl)(itr2.next())).compareTo((ContactImpl)tmp) != 0) {
-					break;
-				}else {
-					if(!itr2.hasNext()) {
-						return true;
-					}
+					return true;
+				}
+				if(!itr2.hasNext()) {
+					return false;
+
 				}
 			}
 		}
-		
-		return false;
+		return true; 	// for the compiler
 	}
 
 	@Override
