@@ -46,16 +46,17 @@ public class ContactManagerImpl implements ContactManager {
 			Contact tmp = itr.next();
 			Iterator<Contact> itr2 = contacts.iterator();
 			while(itr2.hasNext()) {
-				if(((ContactImpl)(itr2.next())).compareTo((ContactImpl)tmp) != 0) {
-					return true;
+				Contact tmp2 = itr2.next();
+				if(((ContactImpl)(tmp2)).compareTo((ContactImpl)tmp) == 0) {
+					break;
 				}
 				if(!itr2.hasNext()) {
-					return false;
+					return true;
 
 				}
 			}
 		}
-		return true; 	// for the compiler
+		return false;
 	}
 
 	@Override
@@ -291,6 +292,51 @@ public class ContactManagerImpl implements ContactManager {
 	public void flush() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public static void main(String[] args) {
+		ContactManagerImpl launcher = new ContactManagerImpl();
+		launcher.launch();
+	}
+	
+	/**
+	 * 
+	 */
+	public void launch() {
+		addNewContact("Joe Bloggs", "Joe Blogg's notes");
+		addNewContact("John Smith", "John Smith's notes");
+		Calendar testDate = Calendar.getInstance();
+		testDate.set(2014,2,1);
+		Set<Contact> contacts2 = new TreeSet<Contact>();
+		Contact JoeBloggs = new ContactImpl(1, "Joe Bloggs");
+		contacts2.add(JoeBloggs);
+		
+		Set<Contact> tester = getContacts("Joe");
+		
+		Iterator<Contact> itr = contacts2.iterator();
+		while(itr.hasNext()) {
+			Contact tmp = itr.next();
+			System.out.println(tmp.getId());
+			Iterator<Contact> itr2 = contacts.iterator();
+			while(itr2.hasNext()) {
+				Contact tmp2 = itr2.next();
+				if(((ContactImpl)(tmp2)).compareTo((ContactImpl)tmp) != 0) {
+					System.out.println("Unknown :(");
+				}
+				if(!itr2.hasNext()) {
+					System.out.println("Known :)");
+					System.out.flush();
+				}
+			}
+		}
+		
+		// why does tester pass but contacts not????
+		
+		
+		addFutureMeeting(contacts2, testDate);
+		testDate.set(2010,1,2);
+		//addNewPastMeeting(contacts2, testDate, "");
+				
 	}
 
 }
