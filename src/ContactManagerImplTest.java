@@ -290,7 +290,7 @@ public class ContactManagerImplTest {
 		Set<Contact> expected = new TreeSet<Contact>();
 		expected.add(new ContactImpl(3, "Dave Murray"));
 		Set<Contact> output = demo.getContacts("Dave Murray");
-		assertTrue(output.equals(expected));
+		assertEquals(output,expected);
 	}
 	
 	@Test(expected = NullPointerException.class)
