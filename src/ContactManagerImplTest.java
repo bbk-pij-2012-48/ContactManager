@@ -42,7 +42,7 @@ public class ContactManagerImplTest {
 		testDate.set(2014,1,2);
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		contacts.add(new ContactImpl(2, "Dave Jones"));
+		contacts.add(new ContactImpl(3, "Dave Jones"));
 		demo.addFutureMeeting(contacts, testDate);	
 	}
 	
