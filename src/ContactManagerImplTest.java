@@ -12,61 +12,63 @@ import org.junit.Before;
 
 public class ContactManagerImplTest {
 	private ContactManager demo;
+	private Calendar dateA;		// general-use past date
+	private Calendar dateB;		// general-use future date
+	private Calendar dateC;		// future date for the same day, with time set to 2359
+	private Calendar dateD;     // alternative past date
 	
 	@Before
 	public void buildUp() {
+		dateA = Calendar.getInstance();
+		dateB = Calendar.getInstance();
+		dateC = Calendar.getInstance();
+		dateD = Calendar.getInstance();
+		dateA.set(2010,1,2);
+		dateB.set(2014,2,1);
+		dateC.set(2014,2,1,23,59);
+		dateD.set(2009,2,1);
+		
 		demo = new ContactManagerImpl();
 		demo.addNewContact("Joe Bloggs", "Joe Blogg's notes");
 		demo.addNewContact("John Smith", "John Smith's notes");
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2014,2,1);
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));			// note that this increments the nextContactId to 4
-		demo.addFutureMeeting(contacts, testDate);
-		testDate.set(2010,1,2);
-		demo.addNewPastMeeting(contacts, testDate, "");
+		demo.addFutureMeeting(contacts, dateB);
+		demo.addNewPastMeeting(contacts, dateA, "");
 	}
 
 	@Test
 	public void testAddFutureMeeting() {
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2014,3,1);
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
 		contacts.add(new ContactImpl(2, "John Smith"));
-		assertEquals(3,demo.addFutureMeeting(contacts, testDate));
+		assertEquals(3,demo.addFutureMeeting(contacts, dateC));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddFutureMeetingIllegalContact() {
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2014,1,2);
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
 		contacts.add(new ContactImpl(3, "Dave Jones"));
-		demo.addFutureMeeting(contacts, testDate);	
+		demo.addFutureMeeting(contacts, dateB);	
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void AddFutureMeetingIllegalDate() {
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2012,2,1);
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		demo.addFutureMeeting(contacts, testDate);
+		demo.addFutureMeeting(contacts, dateA);
 	}
 	
 	@Test
 	public void testGetPastMeeting() {
 		Meeting output = demo.getPastMeeting(2);
 		
-		Calendar testDate = Calendar.getInstance();
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		testDate.set(2010,2,1);
-		Meeting expected = new PastMeetingImpl(2, testDate, contacts);
+		Meeting expected = new PastMeetingImpl(2, dateA, contacts);
 		
-		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected), 0);
+		assertTrue(((MeetingImpl)output).equals((MeetingImpl)expected));
 	}
 
 	@Test
@@ -84,13 +86,11 @@ public class ContactManagerImplTest {
 	public void testGetFutureMeeting() {
 		Meeting output = demo.getFutureMeeting(1);
 		
-		Calendar testDate = Calendar.getInstance();
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		testDate.set(2014,2,1);
-		Meeting expected = new FutureMeetingImpl(1, testDate, contacts);
+		Meeting expected = new FutureMeetingImpl(1, dateB, contacts);
 		
-		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
+		assertTrue(((MeetingImpl)output).equals((MeetingImpl)expected));
 	}
 	
 	@Test
@@ -107,18 +107,15 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetMeeting() {
-		Calendar testDate = Calendar.getInstance();
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		testDate.set(2014,2,1);
-		Meeting expected = new FutureMeetingImpl(1, testDate, contacts);
+		Meeting expected = new FutureMeetingImpl(1, dateB, contacts);
 		Meeting output = demo.getMeeting(1);
-		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
+		assertTrue(((MeetingImpl)output).equals((MeetingImpl)expected));
 		
-		testDate.set(2010,2,1);
-		expected = new PastMeetingImpl(2, testDate, contacts);
+		expected = new PastMeetingImpl(2, dateA, contacts);
 		output = demo.getMeeting(2);
-		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
+		assertTrue(((MeetingImpl)output).equals((MeetingImpl)expected));
 		
 		output = demo.getMeeting(20);
 		assertNull(output);
@@ -132,15 +129,15 @@ public class ContactManagerImplTest {
 		assertTrue(expected.equals(output));
 		
 		// test 2 meetings return, noting chronological order
-		Calendar testDate = Calendar.getInstance();
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		testDate.set(2014,2,1);
-		expected.add(new FutureMeetingImpl(1, testDate, contacts));
+		expected.add(new FutureMeetingImpl(1, dateB, contacts));
+		output = demo.getFutureMeetingList(new ContactImpl(1, "Joe Bloggs"));
 		
-		testDate.set(2014,2,1,23,59);
-		demo.addFutureMeeting(contacts, testDate);
-		expected.add(new FutureMeetingImpl(3, testDate, contacts));
+		assertTrue(expected.equals(output));
+
+		demo.addFutureMeeting(contacts, dateC);
+		expected.add(new FutureMeetingImpl(4, dateC, contacts));
 		
 		output = demo.getFutureMeetingList(new ContactImpl(1, "Joe Bloggs"));
 		assertTrue(output.equals(expected));		
@@ -154,24 +151,20 @@ public class ContactManagerImplTest {
 	@Test
 	public void testGetFutureMeetingListCalendar() {
 		// test empty list
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2030,1,2);
 		List<Meeting> expected = new ArrayList<Meeting>();
-		List<Meeting> output = demo.getFutureMeetingList(testDate);
+		List<Meeting> output = demo.getFutureMeetingList(dateC);
 		assertTrue(expected.equals(output));
 		
 		// test 2 meetings return, noting chronological order
 		
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		testDate.set(2014,2,1);
-		expected.add(new FutureMeetingImpl(1, testDate, contacts));
+		expected.add(new FutureMeetingImpl(1, dateB, contacts));
 		
-		testDate.set(2014,2,1,23,59);
-		demo.addFutureMeeting(contacts, testDate);
-		expected.add(new FutureMeetingImpl(3, testDate, contacts));
+		demo.addFutureMeeting(contacts, dateC);
+		expected.add(new FutureMeetingImpl(3, dateC, contacts));
 		
-		output = demo.getFutureMeetingList(testDate);
+		output = demo.getFutureMeetingList(dateC);
 		assertTrue(output.equals(expected));			
 	}
 
@@ -185,13 +178,10 @@ public class ContactManagerImplTest {
 		// test 2 meetings return, noting chronological order
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2009,2,1);
-		demo.addNewPastMeeting(contacts, testDate, "Notes");
+		demo.addNewPastMeeting(contacts, dateD, "Notes");
 		
-		expected.add(new PastMeetingImpl(3, testDate, contacts));
-		testDate.set(2010,2,1);
-		expected.add(new PastMeetingImpl(2, testDate, contacts));		
+		expected.add(new PastMeetingImpl(3, dateD, contacts));
+		expected.add(new PastMeetingImpl(2, dateA, contacts));		
 		output = demo.getPastMeetingList(new ContactImpl(1, "Joe Bloggs"));
 		
 		assertTrue(output.equals(expected));
@@ -207,21 +197,18 @@ public class ContactManagerImplTest {
 	public void testAddNewPastMeeting() {
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		Calendar testDate = Calendar.getInstance();
-		testDate.set(2012,2,1);
 		String notes = "Notes";
-		demo.addNewPastMeeting(contacts, testDate, notes);	
-		Meeting expected = new PastMeetingImpl(3, testDate, contacts);
+		demo.addNewPastMeeting(contacts, dateD, notes);	
+		Meeting expected = new PastMeetingImpl(3, dateD, contacts);
 		Meeting output = demo.getMeeting(3);
-		assertEquals(((MeetingImpl)output).compareTo((MeetingImpl)expected),0);
+		assertTrue(((MeetingImpl)output).equals((MeetingImpl)expected));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testAddNewPastMeetingNoContacts() {
 		Set<Contact> contacts = new TreeSet<Contact>();
-		Calendar testDate = Calendar.getInstance();
 		String notes = "Notes";
-		demo.addNewPastMeeting(contacts, testDate, notes);
+		demo.addNewPastMeeting(contacts, dateD, notes);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -229,16 +216,14 @@ public class ContactManagerImplTest {
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
 		contacts.add(new ContactImpl(20, "Steve Jobs"));
-		Calendar testDate = Calendar.getInstance();
 		String notes = "Notes";
-		demo.addNewPastMeeting(contacts, testDate, notes);	
+		demo.addNewPastMeeting(contacts, dateD, notes);	
 	}
 	
 	@Test(expected = NullPointerException.class) 
 	public void testAddNewPastMeetingNullContacts() {
-		Calendar testDate = Calendar.getInstance();
 		String notes = "Notes";
-		demo.addNewPastMeeting(null, testDate, notes);
+		demo.addNewPastMeeting(null, dateD, notes);
 	}
 	
 	@Test(expected = NullPointerException.class) 
@@ -253,8 +238,7 @@ public class ContactManagerImplTest {
 	public void testAddNewPastMeetingNullNotes() {
 		Set<Contact> contacts = new TreeSet<Contact>();
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
-		Calendar testDate = Calendar.getInstance();
-		demo.addNewPastMeeting(contacts, testDate, null);
+		demo.addNewPastMeeting(contacts, dateD, null);
 	}
 	
 	@Test
