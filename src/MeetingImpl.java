@@ -45,7 +45,7 @@ public class MeetingImpl implements Meeting, Comparable<MeetingImpl> {
 	public boolean attendedBy(Contact contact) {
 		Iterator<Contact> itr = contacts.iterator();
 		while(itr.hasNext()) {
-			if(itr.next().equals(contact)) {
+			if(((ContactImpl)itr.next()).compareTo((ContactImpl)contact) == 0) {
 				return true;
 			}
 		}
