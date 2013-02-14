@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class ContactManagerImplTest {
 		Calendar testDate = Calendar.getInstance();
 		testDate.set(2014,2,1);
 		Set<Contact> contacts = new TreeSet<Contact>();
-		contacts.add(new ContactImpl(1, "Joe Bloggs"));
+		contacts.add(new ContactImpl(1, "Joe Bloggs"));			// note that this increments the nextContactId to 4
 		demo.addFutureMeeting(contacts, testDate);
 		testDate.set(2010,1,2);
 		demo.addNewPastMeeting(contacts, testDate, "");
@@ -37,7 +38,7 @@ public class ContactManagerImplTest {
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
-	public void AddFutureMeetingIllegalContact() {
+	public void testAddFutureMeetingIllegalContact() {
 		Calendar testDate = Calendar.getInstance();
 		testDate.set(2014,1,2);
 		Set<Contact> contacts = new TreeSet<Contact>();
@@ -281,11 +282,11 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testAddNewContact() {
-		demo.addNewContact("Dave Murray", "");
+		demo.addNewContact("Dave Murray", "notes");
 		Set<Contact> expected = new TreeSet<Contact>();
-		expected.add(new ContactImpl(3, "Dave Murray"));
-		Set<Contact> output = demo.getContacts("Dave Murray");
-		assertEquals(output,expected);
+		expected.add(new ContactImpl(4, "Dave Murray"));
+		Set<Contact> output = demo.getContacts("Dave");
+		assertTrue(output.equals(expected));
 	}
 	
 	@Test(expected = NullPointerException.class)
@@ -304,11 +305,10 @@ public class ContactManagerImplTest {
 	}
 
 	@Test
-	public void testGetContactsString() {
+	public void testGetContactsString() {					
 		Set<Contact> output = demo.getContacts("ZZZZ");
 		Set<Contact> expected = new TreeSet<Contact>();
 		assertTrue(output.equals(expected));
-		
 		expected.add(new ContactImpl(2, "John Smith"));
 		output = demo.getContacts("John");
 		assertTrue(output.equals(expected));
