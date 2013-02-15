@@ -16,6 +16,7 @@ public class ContactManagerImplTest {
 	private Calendar dateB;		// general-use future date
 	private Calendar dateC;		// future date for the same day, with time set to 2359
 	private Calendar dateD;     // alternative past date
+	private Calendar dateE;     // alternative future date
 	
 	@Before
 	public void buildUp() {
@@ -23,10 +24,12 @@ public class ContactManagerImplTest {
 		dateB = Calendar.getInstance();
 		dateC = Calendar.getInstance();
 		dateD = Calendar.getInstance();
+		dateE = Calendar.getInstance();
 		dateA.set(2010,1,2);
 		dateB.set(2014,2,1);
 		dateC.set(2014,2,1,23,59);
 		dateD.set(2009,2,1);
+		dateE.set(2030,2,1);
 		
 		demo = new ContactManagerImpl();
 		demo.addNewContact("Joe Bloggs", "Joe Blogg's notes");
@@ -152,7 +155,7 @@ public class ContactManagerImplTest {
 	public void testGetFutureMeetingListCalendar() {
 		// test empty list
 		List<Meeting> expected = new ArrayList<Meeting>();
-		List<Meeting> output = demo.getFutureMeetingList(dateC);
+		List<Meeting> output = demo.getFutureMeetingList(dateE);
 		assertTrue(expected.equals(output));
 		
 		// test 2 meetings return, noting chronological order
@@ -161,11 +164,12 @@ public class ContactManagerImplTest {
 		contacts.add(new ContactImpl(1, "Joe Bloggs"));
 		expected.add(new FutureMeetingImpl(1, dateB, contacts));
 		
-		demo.addFutureMeeting(contacts, dateC);
-		expected.add(new FutureMeetingImpl(3, dateC, contacts));
-		
-		output = demo.getFutureMeetingList(dateC);
-		assertTrue(output.equals(expected));			
+		List<Meeting> expected2 = new ArrayList<Meeting>();
+		demo.addFutureMeeting(contacts, dateE);
+		expected2.add(new FutureMeetingImpl(4, dateE, contacts));
+		output = demo.getFutureMeetingList(dateE);
+
+		assertEquals(output, expected2);			
 	}
 
 	@Test
@@ -285,7 +289,19 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testGetContactsIntArray() {
-		fail("Not yet implemented");
+		Set<Contact> expected = new TreeSet<Contact>();
+		expected.add(new ContactImpl(1, "Joe Bloggs"));
+		Set<Contact> output = demo.getContacts(1);
+		assertEquals(output,expected);
+		
+		expected.add(new ContactImpl(2, "John Smith"));
+		output = demo.getContacts(1,2);
+		assertEquals(output, expected);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetContactsIntArrayUnknownContact() {
+		demo.getContacts(99);
 	}
 
 	@Test
