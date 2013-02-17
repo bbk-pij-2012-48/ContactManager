@@ -1,5 +1,6 @@
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -321,7 +322,12 @@ public class ContactManagerImplTest {
 
 	@Test
 	public void testFlush() {
-		fail("Not yet implemented");
+		demo.flush();
+		ContactManager demo2 = new ContactManagerImpl();
+		assertEquals(demo.getContacts(1,2), demo2.getContacts(1,2));
+		assertEquals(demo.getFutureMeeting(1), demo2.getFutureMeeting(1));
+		assertEquals(demo.getPastMeeting(2), demo2.getPastMeeting(2));
+		(new File("contacts.txt")).delete();
 	}
 
 }
