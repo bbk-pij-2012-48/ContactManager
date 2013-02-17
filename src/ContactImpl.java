@@ -1,5 +1,8 @@
+import java.io.Serializable;
 
-public class ContactImpl implements Contact, Comparable<ContactImpl>{
+
+@SuppressWarnings("serial")
+public class ContactImpl implements Contact, Comparable<ContactImpl>, Serializable{
 	
 	private int id;
 	private String name;

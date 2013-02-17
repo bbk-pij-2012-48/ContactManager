@@ -1,9 +1,11 @@
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Set;
 
 
-public class MeetingImpl implements Meeting, Comparable<MeetingImpl> {
+@SuppressWarnings("serial")
+public class MeetingImpl implements Meeting, Comparable<MeetingImpl>, Serializable {
 	
 	private int id;
 	private Calendar date;

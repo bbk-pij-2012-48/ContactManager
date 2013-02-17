@@ -6,23 +6,63 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class ContactManagerImpl implements ContactManager {
+@SuppressWarnings("serial")
+public class ContactManagerImpl implements ContactManager, Serializable {
 
+	private static final String FILENAME = "contacts.txt";
 	private Set<Contact> contacts;
 	private Set<FutureMeeting> futureMeetings;
 	private Set<PastMeeting> pastMeetings;
 	private static int nextMeetingId;
 	private static int nextContactId;
 
+	@SuppressWarnings("unchecked")
 	public ContactManagerImpl() {
-		contacts = new TreeSet<Contact>();
-		futureMeetings = new TreeSet<FutureMeeting>();
-		pastMeetings = new TreeSet<PastMeeting>();
 		nextMeetingId = 1;
 		nextContactId = 1;
+		File tmp = new File(FILENAME);
+		
+		if(!tmp.exists()) {
+			// Create new data structures
+			contacts = new TreeSet<Contact>();
+			futureMeetings = new TreeSet<FutureMeeting>();
+			pastMeetings = new TreeSet<PastMeeting>();
+		} else {
+			// Load previous data
+			ObjectInputStream in = null;
+			try {
+				in = new ObjectInputStream(
+						new BufferedInputStream(
+								new FileInputStream(FILENAME)));
+				contacts = (Set<Contact>) in.readObject();
+				futureMeetings = (Set<FutureMeeting>) in.readObject();
+				pastMeetings = (Set<PastMeeting>) in.readObject();
+			} catch (IOException ex) {
+				System.err.println("Error: Read error " + ex);
+				ex.printStackTrace();
+			} catch (ClassNotFoundException ex) {
+				System.err.println("Error: Read error " + ex);
+				ex.printStackTrace();
+			} finally {
+				try {
+					in.close();
+				} catch(IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 	}
-	
+
 	public static void incrementMeetingId() {
 		nextMeetingId++;
 	}
@@ -290,8 +330,23 @@ public class ContactManagerImpl implements ContactManager {
 
 	@Override
 	public void flush() {
-		// TODO Auto-generated method stub
-
+		ObjectOutputStream out = null;
+		try {
+			out = new ObjectOutputStream(
+					new BufferedOutputStream(
+							new FileOutputStream(FILENAME)));
+			out.writeObject(contacts);
+			out.writeObject(futureMeetings);
+			out.writeObject(pastMeetings);
+		} catch (IOException ex) {
+			System.err.println("Error: Write error " + ex);
+			ex.printStackTrace();
+		} finally {
+			try {
+				out.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
-
 }
