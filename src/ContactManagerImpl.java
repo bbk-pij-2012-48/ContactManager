@@ -26,6 +26,11 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	private static int nextMeetingId;
 	private static int nextContactId;
 
+	/**
+	 * Constructor.
+	 * If no contacts.txt file from a prior session exists, then the attributes are initialised. 
+	 * If a contacts.txt file does exist, then the attributes are imported from there.
+	 */
 	@SuppressWarnings("unchecked")
 	public ContactManagerImpl() {
 		nextMeetingId = 1;
@@ -62,15 +67,29 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			}
 		}
 	}
-
+	
+	/**
+	 * Increments the nextMeetingId. 
+	 * Used when creating a new meeting.
+	 */
 	public static void incrementMeetingId() {
 		nextMeetingId++;
 	}
 	
+	/**
+	 * Increments the nextContactId.
+	 * Used when creating a new contact.
+	 */
 	public static void incrementContactId() {
 		nextContactId++;
 	}
 
+	/**
+	 * Tests whether a given date is in the past.
+	 * 
+	 * @param date the date for testing
+	 * @return true if the date is in the past, false otherwise.
+	 */
 	private boolean timeInPast(Calendar date) {
 		Calendar current = Calendar.getInstance();
 		if(date.before(current)) {
@@ -80,6 +99,13 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return false;
 	}
 
+	/**
+	 * Tests whether any contact in a given set is unknown,
+	 * i.e. not stored in contacts.
+	 * 
+	 * @param testContacts the set of contacts to test
+	 * @return true if one or more of the contacts is unknown. false otherwise
+	 */
 	private boolean unknownContact(Set<Contact> testContacts) {
 		Iterator<Contact> itr = testContacts.iterator();
 		while(itr.hasNext()) {
@@ -99,6 +125,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return false;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public int addFutureMeeting(Set<Contact> contacts, Calendar date) {
 		int meetingId = nextMeetingId; // not using nextMeetingId directly as this will increment during the method
@@ -117,6 +146,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return meetingId;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public PastMeeting getPastMeeting(int id) {
 		// Check that there is no such meeting happening in the future
@@ -126,6 +158,14 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return getPastMeetingNoException(id);
 	}
 	
+	/**
+	 * Has the same function as getPastMeeting(int), but does not check if a future meeting
+	 * with the same id exists, and so does not throw an IllegalArgumentException.
+	 * Used to avoid circularity in calls between getPastMeeting(int) and getFutureMeeting(int).
+	 * 
+	 * @param id the meeting id
+	 * @return the PastMeeting with the given id, or null if no such PastMeeting exists
+	 */
 	private PastMeeting getPastMeetingNoException(int id) {
 		Iterator<PastMeeting> itr = pastMeetings.iterator();
 		while(itr.hasNext()) {
@@ -138,6 +178,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return null;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public FutureMeeting getFutureMeeting(int id) {
 		// Check that there is no such meeting happening in the past
@@ -148,6 +191,14 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return getFutureMeetingNoException(id);
 	}
 	
+	/**
+	 * Has the same function as getFutureMeeting(int), but does not check if a past meeting
+	 * with the same id exists, and so does not throw an IllegalArgumentException.
+	 * Used to avoid circularity in calls between getPastMeeting(int) and getFutureMeeting(int).
+	 * 
+	 * @param id the meeting id
+	 * @return the FutureMeeting with the given id, or null if no such FutureMeeting exists
+	 */
 	private FutureMeeting getFutureMeetingNoException(int id) {
 		Iterator<FutureMeeting> itr = futureMeetings.iterator();
 		while(itr.hasNext()) {
@@ -160,6 +211,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return null;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Meeting getMeeting(int id) {
 		// Search past meetings
@@ -177,6 +231,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return null;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public List<Meeting> getFutureMeetingList(Contact contact) {
 		// Check contact is known
@@ -201,6 +258,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return output;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date) {
 		List<Meeting> output = new ArrayList<Meeting>();
@@ -220,6 +280,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return output;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public List<PastMeeting> getPastMeetingList(Contact contact) {
 		// Check contact is known
@@ -244,6 +307,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return output;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public void addNewPastMeeting(Set<Contact> contacts, Calendar date,
 			String text) {
@@ -266,6 +332,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public void addMeetingNotes(int id, String text) {
 		// Test for any illegal arguments
@@ -282,6 +351,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		((PastMeetingImpl)tmp).addNotes(text);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public void addNewContact(String name, String notes) {
 		if(name == null || notes == null) {
@@ -292,6 +364,13 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		contacts.add(tmp);
 	}
 	
+	/**
+	 * Returns the single contact with a given id.
+	 * 
+	 * @param id the contact id to search for
+	 * @return	Contact the contact with the given id
+	 * @throws IllegalArgumentException if no such contact exists
+	 */
 	private Contact getContact(int id) {
 		Iterator<Contact> itr = contacts.iterator();
 		while(itr.hasNext()) {
@@ -303,6 +382,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		throw new IllegalArgumentException("Error - Contact is unknown");
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Set<Contact> getContacts(int... ids) {
 		Set<Contact> output = new TreeSet<Contact>();
@@ -312,6 +394,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return output;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Set<Contact> getContacts(String name) {
 		if(name == null) {
@@ -328,6 +413,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		return output;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public void flush() {
 		ObjectOutputStream out = null;
