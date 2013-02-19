@@ -2,6 +2,7 @@ import java.util.Calendar;
 import java.util.Set;
 
 
+@SuppressWarnings("serial")
 public class PastMeetingImpl extends MeetingImpl implements PastMeeting {
 	
 	private String notes;
