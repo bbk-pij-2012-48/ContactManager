@@ -244,18 +244,22 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		}
 		
 		// Add all future meetings with contact
-		List<Meeting> output = new ArrayList<Meeting>();
+		List<MeetingImpl> output = new ArrayList<MeetingImpl>();
 		Iterator<FutureMeeting> itr = futureMeetings.iterator();
 		while(itr.hasNext()) {
 			FutureMeeting tmp = itr.next();
 			if(((FutureMeetingImpl)tmp).attendedBy(contact)) {
-				output.add(tmp);
+				output.add((MeetingImpl)tmp);
 			}
 		}
 		
-		DateComparator comparator = new DateComparator();
-		Collections.sort(output, comparator);
-		return output;
+		Collections.sort(output);
+		
+		List<?> castOutput1 = (List<?>)output;
+		@SuppressWarnings("unchecked")
+		List<Meeting> castOutput2 = (List<Meeting>)castOutput1;
+		
+		return castOutput2;
 	}
 
 	/**
@@ -263,21 +267,26 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	 */
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date) {
-		List<Meeting> output = new ArrayList<Meeting>();
+		List<MeetingImpl> output = new ArrayList<MeetingImpl>();
 		Iterator<FutureMeeting> itr = futureMeetings.iterator();
+		
 		while(itr.hasNext()) {
 			FutureMeeting tmp = itr.next();
 			Calendar tmpDate = tmp.getDate();
 			if(tmpDate.get(Calendar.DATE) == date.get(Calendar.DATE) &&
 					tmpDate.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
 						tmpDate.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
-				output.add(tmp);
+				output.add((MeetingImpl)tmp);
 			}
 		}
 		
-		DateComparator comparator = new DateComparator();
-		Collections.sort(output, comparator);
-		return output;
+		Collections.sort(output);
+		
+		List<?> castOutput1 = (List<?>)output;
+		@SuppressWarnings("unchecked")
+		List<Meeting> castOutput2 = (List<Meeting>)castOutput1;
+		
+		return castOutput2;
 	}
 
 	/**
@@ -293,18 +302,21 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		}
 		
 		// Add all past meetings with contact
-		List<PastMeeting> output = new ArrayList<PastMeeting>();
+		List<PastMeetingImpl> output = new ArrayList<PastMeetingImpl>();
 		Iterator<PastMeeting> itr = pastMeetings.iterator();
 		while(itr.hasNext()) {
 			PastMeeting tmp = itr.next();
 			if(((PastMeetingImpl)tmp).attendedBy(contact)) {
-				output.add(tmp);
+				output.add((PastMeetingImpl)tmp);
 			}
 		}
 		
-		DateComparator comparator = new DateComparator();
-		Collections.sort(output, comparator);
-		return output;
+		Collections.sort(output);
+		
+		List<?> castOutput1 = (List<?>)output;
+		@SuppressWarnings("unchecked")
+		List<PastMeeting> castOutput2 = (List<PastMeeting>)castOutput1;
+		return castOutput2;
 	}
 
 	/**
