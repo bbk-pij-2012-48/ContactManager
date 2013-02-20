@@ -19,7 +19,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class ContactManagerImpl implements ContactManager, Serializable {
 
-	private static final String FILENAME = "contacts.txt";
+	private static final String FILENAME = "contacts.txt";		// Default path for storing data
 	private Set<Contact> contacts;
 	private Set<FutureMeeting> futureMeetings;
 	private Set<PastMeeting> pastMeetings;
@@ -357,9 +357,13 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 		if(tmp == null) {
 			throw new IllegalArgumentException("Error - Meeting does not exist");
 		}
+
 		if(tmp instanceof FutureMeetingImpl) {
-			throw new IllegalStateException("Error - Meeting cannot be in the future");
+			if(!timeInPast(tmp.getDate())) {
+				throw new IllegalStateException("Error - Meeting cannot be in the future");
+			} 
 		}
+		
 		((PastMeetingImpl)tmp).addNotes(text);
 	}
 
@@ -449,4 +453,14 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			}
 		}
 	}
+	
+	public static void main(String[] args) {
+		ContactManagerImpl launcher = new ContactManagerImpl();
+		launcher.launch();
+	}
+	
+	public void launch() {
+		
+	}
+	
 }
