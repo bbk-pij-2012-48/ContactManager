@@ -268,8 +268,9 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	@Override
 	public List<Meeting> getFutureMeetingList(Calendar date) {
 		List<MeetingImpl> output = new ArrayList<MeetingImpl>();
-		Iterator<FutureMeeting> itr = futureMeetings.iterator();
 		
+		// search future meetings
+		Iterator<FutureMeeting> itr = futureMeetings.iterator();
 		while(itr.hasNext()) {
 			FutureMeeting tmp = itr.next();
 			Calendar tmpDate = tmp.getDate();
@@ -277,6 +278,18 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 					tmpDate.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
 						tmpDate.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
 				output.add((MeetingImpl)tmp);
+			}
+		}
+		
+		// search past meetings (note - the method name is incorrect, and should be getMeetingList(Calendar)
+		Iterator<PastMeeting> itr2 = pastMeetings.iterator();
+		while(itr2.hasNext()) {
+			PastMeeting tmp2 = itr2.next();
+			Calendar tmpDate2 = tmp2.getDate();
+			if(tmpDate2.get(Calendar.DATE) == date.get(Calendar.DATE) &&
+					tmpDate2.get(Calendar.MONTH) == date.get(Calendar.MONTH) &&
+						tmpDate2.get(Calendar.YEAR) == date.get(Calendar.YEAR)) {
+				output.add((MeetingImpl)tmp2);
 			}
 		}
 		
