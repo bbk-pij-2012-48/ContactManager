@@ -269,7 +269,7 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 	public List<Meeting> getFutureMeetingList(Calendar date) {
 		List<MeetingImpl> output = new ArrayList<MeetingImpl>();
 		
-		// search future meetings
+		// search future meetings 
 		Iterator<FutureMeeting> itr = futureMeetings.iterator();
 		while(itr.hasNext()) {
 			FutureMeeting tmp = itr.next();
@@ -466,14 +466,4 @@ public class ContactManagerImpl implements ContactManager, Serializable {
 			}
 		}
 	}
-	
-	public static void main(String[] args) {
-		ContactManagerImpl launcher = new ContactManagerImpl();
-		launcher.launch();
-	}
-	
-	public void launch() {
-		
-	}
-	
 }
